@@ -3,11 +3,27 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
 import Image from "next/image";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 // client-side component
 const HeroSection = () => {
   const imageRef = useRef();
+  useEffect(()=> {
+    const imageElement = imageRef.current;
+    const handleScroll=()=>{
+      const scrollPosition = window.scrollY;
+      const scrollThreshold = 100;
+      if(scrollPosition>scrollThreshold){
+        imageElement.classList.add("scrolled");
+      }
+      else{
+        imageElement.classList.remove("scrolled");
+      }
+    }
+    window.addEventListener("scroll",handleScroll)
+    
+    return()=> window.removeEventListener("scroll",handleScroll);
+  },[]);
   return (
     <div className="pb-20 px-4">
         <div className="container mx-auto text-center">
@@ -22,8 +38,8 @@ const HeroSection = () => {
            
         </div>
         <div className="hero-section-img">
-          <div>
-        <Image src="/banner.png" width={1280} height={720} alt="Dashboard"className="rounded-lg shadow-2xl border mx-auto"/>
+          <div ref={imageRef} className="hero-image">
+        <Image src="/banner.png" width={1000} height={600} alt="Dashboard"className="rounded-lg shadow-2xl border mx-auto"/>
        </div>
         </div>
     </div>
